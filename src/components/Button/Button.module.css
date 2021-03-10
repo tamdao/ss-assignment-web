@@ -1,0 +1,20 @@
+.Button {
+  border-radius: 0.2rem;
+  outline: 0;
+}
+.small {
+  padding: 0.4rem 0.8rem;
+}
+.normal {
+  padding: 1rem 2.4rem;
+  font-size: 1rem;
+}
+.primary {
+  background-color: #659eba;
+  border: #659eba solid 1px;
+  color: white;
+}
+.secondary {
+  border: #b2b2b3 solid 2px;
+  background-color: white;
+}

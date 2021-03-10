@@ -1,0 +1,29 @@
+.Container {
+  max-width: 1024px;
+  min-width: 320px;
+  width: 80%;
+}
+.Header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.HeaderIcon {
+  margin-right: 0.8rem;
+}
+.Content {
+  margin-bottom: 2rem;
+}
+.Footer {
+  padding: 2.4rem 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.ArrowIconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

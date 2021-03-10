@@ -1,0 +1,14 @@
+.Panel {
+  border: 1px solid #b2b2b3;
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+.Header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fbfbfb;
+  padding: 0.4rem 1.2rem;
+}
+.Content {
+  padding: 2.4rem 1.2rem;
+}

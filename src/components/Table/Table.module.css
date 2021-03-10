@@ -1,0 +1,25 @@
+.Table {
+  width: 100%;
+  border-spacing: 0;
+}
+.Td,
+.Th {
+  margin: 0;
+}
+.Th {
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0.2rem 0.4rem;
+}
+.Input {
+  padding: 0.4rem;
+  outline: none;
+  border: none;
+  border-left: 2px solid transparent;
+}
+.Input:focus {
+  padding: 0.4rem;
+  outline: none;
+  border-left-color: #659eba;
+  background-color: #f9fbfc;
+}
