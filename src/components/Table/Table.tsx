@@ -1,11 +1,12 @@
 import React from 'react';
-import { useTable, Column } from 'react-table';
+import { useTable, useExpanded, Column, useRowState } from 'react-table';
 import { EditableCell } from './EditableCell';
 import styles from './Table.module.css';
 
 export type IColumn = {
   type?: string;
   datalist?: Array<string>;
+  validation?: (value: string) => boolean;
 } & Column;
 
 interface IProps {
@@ -25,12 +26,15 @@ const Table: React.FC<IProps> = ({ columns, data, onCellChange }) => {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-  } = useTable({
-    columns,
-    data,
-    defaultColumn,
-    onCellChange,
-  } as any);
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn,
+      onCellChange,
+    } as any,
+    useRowState
+  );
 
   return (
     <>

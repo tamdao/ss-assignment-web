@@ -1,4 +1,5 @@
 import React from 'react';
+import validator from 'validator';
 import MailOutlineOutlinedIcon from '@material-ui/icons/MailOutlineOutlined';
 import ArrowRightAltOutlinedIcon from '@material-ui/icons/ArrowRightAltOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
@@ -22,20 +23,32 @@ export default function () {
     () => [
       {
         id: 'arrow-icon',
-        Cell: () => (
-          <div className={styles.IconWrapper}>
-            <ArrowRightAltOutlinedIcon fontSize="small" />
-          </div>
-        ),
+        Cell: ({ row }: any) => {
+          if (!row.state.errors) {
+            return <ArrowRightAltOutlinedIcon fontSize="small" />;
+          }
+          console.log('row.state.errors', row.state.errors);
+          for (const key in row.state.errors) {
+            const isError = row.state.errors[key];
+            if (isError) {
+              return (
+                <ArrowRightAltOutlinedIcon fontSize="small" color="error" />
+              );
+            }
+          }
+          return <ArrowRightAltOutlinedIcon fontSize="small" />;
+        },
       },
       {
         Header: 'Email',
         accessor: 'email',
+        validation: validator.isEmail,
       },
       {
         Header: 'Phone number',
         accessor: 'phoneNumber',
         type: 'phone',
+        validation: validator.isMobilePhone,
       },
       {
         Header: 'First name',

@@ -16,10 +16,15 @@
   outline: none;
   border: none;
   border-left: 2px solid transparent;
+  width: 100%;
 }
 .Input:focus {
   padding: 0.4rem;
   outline: none;
   border-left-color: #659eba;
   background-color: #f9fbfc;
+}
+.InputError {
+  background-color: #fdf9f8;
+  color: #d8798b;
 }

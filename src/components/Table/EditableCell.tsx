@@ -5,22 +5,40 @@ import { IColumn } from './Table';
 
 export const EditableCell = ({
   value: initialValue,
-  row: { index },
-  column: { id, type, datalist },
+  row: { index, setState },
+  column: { id, type, datalist, validation },
   onCellChange,
 }: {
   value: string;
-  row: Row;
+  row: Row & { setState: (state: any) => {} };
   column: IColumn;
   onCellChange: (index: number, id: any, value: string) => void;
 }) => {
   const [value, setValue] = React.useState(initialValue);
+  const [error, setError] = React.useState(false);
 
   const onChange = (e: any) => {
     setValue(e.target.value);
   };
 
   const onBlur = () => {
+    if (validation && !validation(value || '')) {
+      setError(true);
+      setState((old: any) => {
+        const errors = old.errors || {};
+        errors[id || ''] = true;
+        old.errors = errors;
+        return { ...old };
+      });
+      return;
+    }
+    setError(false);
+    setState((old: any) => {
+      const errors = old.errors || {};
+      errors[id || ''] = false;
+      old.errors = errors;
+      return { ...old };
+    });
     onCellChange(index, id, value);
   };
 
@@ -28,11 +46,15 @@ export const EditableCell = ({
     setValue(initialValue);
   }, [initialValue]);
 
+  const classNames = error
+    ? `${styles.Input} ${styles.InputError}`
+    : styles.Input;
+
   if (datalist) {
     return (
       <>
         <input
-          className={styles.Input}
+          className={classNames}
           value={value}
           onChange={onChange}
           onBlur={onBlur}
@@ -47,9 +69,20 @@ export const EditableCell = ({
     );
   }
 
+  if (type === 'phone') {
+    return (
+      <input
+        className={classNames}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    );
+  }
+
   return (
     <input
-      className={styles.Input}
+      className={classNames}
       value={value}
       onChange={onChange}
       onBlur={onBlur}
