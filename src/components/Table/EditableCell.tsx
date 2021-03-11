@@ -3,16 +3,34 @@ import { Row } from 'react-table';
 import styles from './Table.module.css';
 import { IColumn } from './Table';
 
+const gerRowErrorStatus = (errors?: any) => {
+  if (!errors) {
+    return false;
+  }
+  for (const key in errors) {
+    const isError = errors[key];
+    if (isError) {
+      return true;
+    }
+  }
+  return false;
+};
+
 export const EditableCell = ({
   value: initialValue,
-  row: { index, setState },
+  row: { index, state, setState },
   column: { id, type, datalist, validation },
   onCellChange,
 }: {
   value: string;
-  row: Row & { setState: (state: any) => {} };
+  row: Row & { setState: (state: any) => {}; state: any };
   column: IColumn;
-  onCellChange: (index: number, id: any, value: string) => void;
+  onCellChange: (
+    index: number,
+    id: any,
+    value: string,
+    rowValid: boolean
+  ) => void;
 }) => {
   const [value, setValue] = React.useState(initialValue);
   const [error, setError] = React.useState(false);
@@ -28,6 +46,7 @@ export const EditableCell = ({
         const errors = old.errors || {};
         errors[id || ''] = true;
         old.errors = errors;
+        onCellChange(index, id, value, !gerRowErrorStatus(errors));
         return { ...old };
       });
       return;
@@ -37,9 +56,9 @@ export const EditableCell = ({
       const errors = old.errors || {};
       errors[id || ''] = false;
       old.errors = errors;
+      onCellChange(index, id, value, !gerRowErrorStatus(errors));
       return { ...old };
     });
-    onCellChange(index, id, value);
   };
 
   React.useEffect(() => {

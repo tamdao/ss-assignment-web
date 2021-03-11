@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { ApolloProvider } from '@apollo/client';
 import './index.css';
 import App from './App';
+import store from './store';
 import reportWebVitals from './reportWebVitals';
 import GoogleFontLoader from 'react-google-font-loader';
+import api from './utils/api';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,7 +19,11 @@ ReactDOM.render(
         },
       ]}
     />
-    <App />
+    <ApolloProvider client={api}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

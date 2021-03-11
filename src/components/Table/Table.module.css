@@ -24,6 +24,9 @@
   border-left-color: #659eba;
   background-color: #f9fbfc;
 }
+.Input::-webkit-calendar-picker-indicator {
+  display: none;
+}
 .InputError {
   background-color: #fdf9f8;
   color: #d8798b;
