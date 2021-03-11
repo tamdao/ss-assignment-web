@@ -6,14 +6,15 @@ import styles from './SendByEmailSms.module.css';
 import { SendByEmailSmsHeader } from './components/SendByEmailSmsHeader';
 import { AddParticipantButton } from './components/AddParticipantButton';
 import { SendByEmailSmsTable } from './components/SendByEmailSmsTable';
-import { useDispatch } from 'react-redux';
-import { saveParticipants } from './sendByEmailSms.redux';
+import {
+  selectDeletedParticipants,
+  selectNewParticipants,
+} from './sendByEmailSms.redux';
 
 export default function () {
-  const dispatch = useDispatch();
-
   const onSaveParticipants = useCallback(() => {
-    dispatch(saveParticipants());
+    console.log('selectDeletedParticipants', selectDeletedParticipants);
+    console.log('selectNewParticipants', selectNewParticipants);
   }, []);
 
   return (

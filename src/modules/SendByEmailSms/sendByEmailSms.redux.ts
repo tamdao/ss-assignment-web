@@ -44,24 +44,6 @@ export const slice: any = createSlice({
       }
       state.validParticipants[action.payload.index] = action.payload.rowValid;
     },
-    saveParticipants: (state: ISendByEmailSmsState) => {
-      const { participants, drafParticipants, validParticipants } = state;
-      const deletedParticipants = participants.filter(
-        (p) => !drafParticipants.find((df) => df.id === p.id)
-      );
-
-      const newParticipants = [];
-
-      for (let index = 0; index < drafParticipants.length; index++) {
-        const participant = drafParticipants[index];
-        if (validParticipants[index]) {
-          newParticipants.push(participant);
-        }
-      }
-
-      console.log('deletedParticipants', deletedParticipants);
-      console.log('newParticipants', newParticipants);
-    },
   },
 });
 
@@ -69,6 +51,27 @@ export const selectDrafParticipants = (state: RootState) =>
   state.sendByEmailSms.drafParticipants;
 export const selectParticipants = (state: RootState) =>
   state.sendByEmailSms.participants;
+export const selectDeletedParticipants = (state: RootState) => {
+  const { participants, drafParticipants } = state.sendByEmailSms;
+  const deletedParticipants = participants.filter(
+    (p) => !drafParticipants.find((df) => df.id === p.id)
+  );
+
+  return deletedParticipants;
+};
+export const selectNewParticipants = (state: RootState) => {
+  const { validParticipants, drafParticipants } = state.sendByEmailSms;
+  const newParticipants = [];
+
+  for (let index = 0; index < drafParticipants.length; index++) {
+    const participant = drafParticipants[index];
+    if (validParticipants[index]) {
+      newParticipants.push(participant);
+    }
+  }
+
+  return newParticipants;
+};
 
 export const {
   initParticipants,
