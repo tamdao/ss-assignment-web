@@ -6,6 +6,7 @@ export const GET_ALL_PARTICIPANTS = gql`
     participants {
       id
       email
+      countryCode
       phoneNumber
       firstName
       lastName
@@ -18,6 +19,7 @@ export const UPSERT_PARTICIPANTS = gql`
   mutation UpsertParticipant(
     $id: String!
     $email: String!
+    $countryCode: String!
     $phoneNumber: String!
     $firstName: String
     $lastName: String
@@ -26,6 +28,7 @@ export const UPSERT_PARTICIPANTS = gql`
     upsertParticipant(
       id: $id
       email: $email
+      countryCode: $countryCode
       phoneNumber: $phoneNumber
       firstName: $firstName
       lastName: $lastName
@@ -47,6 +50,7 @@ export const getUpsertParticipantsMutation = (participants: IParticipant[]) => {
     variables[`item${index}`] = {
       id: participant.id,
       email: participant.email,
+      countryCode: participant.countryCode,
       phoneNumber: participant.phoneNumber,
       firstName: participant.firstName,
       lastName: participant.lastName,
@@ -55,6 +59,7 @@ export const getUpsertParticipantsMutation = (participants: IParticipant[]) => {
     return `item${index}: upsertParticipant(input: $item${index}) {
       id
       email
+      countryCode
       phoneNumber
       firstName
       lastName

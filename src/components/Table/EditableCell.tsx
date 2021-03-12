@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Row } from 'react-table';
+import ReactFlagsSelect from 'react-flags-select';
+
 import styles from './Table.module.css';
 import { IColumn } from './Table';
-import { IParticipant } from '../../modules/SendByEmailSms/sendByEmailSms.redux';
 
 export const getRowErrorStatus = (
   validations: {
-    [key: string]: (value: string) => string;
+    [key: string]: (value: string, originalRow?: any) => string;
   },
   data: any
 ) => {
@@ -14,7 +15,7 @@ export const getRowErrorStatus = (
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const value = data[key];
       if (validations[key]) {
-        if (validations[key](value)) {
+        if (validations[key](value, data)) {
           return true;
         }
       }
@@ -27,12 +28,12 @@ export const getRowErrorStatus = (
 export const EditableCell = ({
   value: initialValue,
   row: { index, original },
-  column: { id, type, datalist, validation },
+  column: { id, type, countryCodeAccessor, datalist, validation },
   onCellChange,
   validations,
 }: {
   value: string;
-  row: Row<IParticipant>;
+  row: Row<any>;
   column: IColumn;
   onCellChange: (
     id: any,
@@ -41,12 +42,15 @@ export const EditableCell = ({
     rowValid: boolean
   ) => void;
   validations: {
-    [key: string]: (value: string) => string;
+    [key: string]: (value: string, originalRow?: any) => string;
   };
 }) => {
+  const [selectedCountryCode, setSelectedCountryCode] = useState(
+    original[countryCodeAccessor as string] || 'US'
+  );
   const [value, setValue] = useState(initialValue);
   const [errorMessage, setErrorMessage] = useState(
-    validation ? validation(initialValue) : ''
+    validation ? validation(initialValue, original) : ''
   );
 
   const onChange = (e: any) => {
@@ -54,7 +58,7 @@ export const EditableCell = ({
   };
 
   const onBlur = () => {
-    setErrorMessage(validation ? validation(value || '') : '');
+    setErrorMessage(validation ? validation(value || '', original) : '');
     onCellChange(
       original.id,
       id as string,
@@ -63,12 +67,26 @@ export const EditableCell = ({
     );
   };
 
+  const onCountryCodeChange = (code: string) => {
+    setSelectedCountryCode(code);
+    setErrorMessage(validation ? validation(value || '', original) : '');
+    onCellChange(
+      original.id,
+      countryCodeAccessor as string,
+      code,
+      !getRowErrorStatus(validations, {
+        ...original,
+        [countryCodeAccessor || '']: code,
+      })
+    );
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
   useEffect(() => {
-    setErrorMessage(validation ? validation(initialValue) : '');
+    setErrorMessage(validation ? validation(initialValue, original) : '');
   }, [validations]);
 
   const classNames = errorMessage
@@ -96,22 +114,27 @@ export const EditableCell = ({
 
   if (type === 'phone') {
     return (
-      <div className={styles.TooltipContainer}>
-        <input
-          className={classNames}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
+      <div className={styles.PhoneContainer}>
+        <ReactFlagsSelect
+          showOptionLabel={false}
+          showSelectedLabel={false}
+          selected={selectedCountryCode}
+          onSelect={onCountryCodeChange}
+          className={styles.FlagsSelect}
         />
-        {errorMessage && (
-          <span className={styles.TooltipText}>{errorMessage}</span>
-        )}
+        <div className={styles.TooltipContainer}>
+          <input
+            className={classNames}
+            value={value}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {errorMessage && (
+            <span className={styles.TooltipText}>{errorMessage}</span>
+          )}
+        </div>
       </div>
     );
-  }
-
-  if (type === 'contry') {
-    return <div className={styles.ContryContainer}></div>;
   }
 
   return (

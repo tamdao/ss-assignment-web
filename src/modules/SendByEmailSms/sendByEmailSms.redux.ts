@@ -6,6 +6,7 @@ export interface IParticipant {
   id: string;
   email: string;
   phoneNumber: string;
+  countryCode: string;
   firstName?: string;
   lastName?: string;
   group?: string;
@@ -37,6 +38,7 @@ export const slice: any = createSlice({
         id: uuidv4(),
         email: '',
         phoneNumber: '',
+        countryCode: 'US',
       });
     },
     removeParticipant: (state: ISendByEmailSmsState, action) => {
@@ -74,6 +76,7 @@ export const slice: any = createSlice({
             if (originalParticipant) {
               originalParticipant.email = participant.email;
               originalParticipant.phoneNumber = participant.phoneNumber;
+              originalParticipant.countryCode = participant.countryCode;
               originalParticipant.firstName = participant.firstName;
               originalParticipant.lastName = participant.lastName;
               originalParticipant.group = participant.group;

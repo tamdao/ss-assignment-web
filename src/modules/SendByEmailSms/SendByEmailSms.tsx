@@ -97,7 +97,7 @@ export default function () {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      onSaveParticipants();
+      onSaveParticipants(false);
     }, 300);
     return () => clearInterval(interval);
   }, [deletedParticipants, newParticipants]);

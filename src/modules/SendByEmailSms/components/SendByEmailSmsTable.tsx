@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
+import phonenumber from 'google-libphonenumber';
 import validator from 'validator';
 import ArrowRightAltOutlinedIcon from '@material-ui/icons/ArrowRightAltOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
@@ -18,7 +19,9 @@ import {
 import { Row } from 'react-table';
 import { getRowErrorStatus } from '../../../components/Table/EditableCell';
 
-export const SendByEmailSmsTable = () => {
+const phoneUtil = phonenumber.PhoneNumberUtil.getInstance();
+
+export const SendByEmailSmsTable = memo(() => {
   const dispatch = useDispatch();
   const participants = useSelector(selectdraftParticipants);
 
@@ -32,7 +35,7 @@ export const SendByEmailSmsTable = () => {
         }: {
           row: Row<IParticipant>;
           validations: {
-            [key: string]: (value: string) => string;
+            [key: string]: (value: string, originalRow?: any) => string;
           };
         }) => {
           const isError = getRowErrorStatus(validations, row.original);
@@ -59,8 +62,8 @@ export const SendByEmailSmsTable = () => {
       {
         Header: 'Email',
         accessor: 'email',
-        validation: (value: string) => {
-          if (!validator.isEmail(value)) {
+        validation: (value: string, originalRow?: any) => {
+          if (!validator.isEmail(value as string)) {
             return 'Invalid email';
           }
           if (participants.filter((p) => p.email === value).length > 1) {
@@ -70,13 +73,29 @@ export const SendByEmailSmsTable = () => {
         },
       },
       {
+        id: 'countryCode',
+        Header: 'Country code',
+        accessor: 'countryCode',
+      },
+      {
         Header: 'Phone number',
         accessor: 'phoneNumber',
         type: 'phone',
-        validation: (value: string) => {
-          if (!validator.isMobilePhone(value)) {
+        countryCodeAccessor: 'countryCode',
+        validation: (value: string, originalRow?: any) => {
+          if (!validator.isNumeric(value)) {
             return 'Invalid phone number';
           }
+          const phoneNumber = phoneUtil.parse(value, originalRow.countryCode);
+
+          const isValidPhoneNumber = phoneUtil.isValidNumberForRegion(
+            phoneNumber,
+            originalRow.countryCode
+          );
+          if (!isValidPhoneNumber) {
+            return 'Invalid phone number';
+          }
+
           return '';
         },
       },
@@ -108,6 +127,13 @@ export const SendByEmailSmsTable = () => {
     [participants]
   );
 
+  const initialState = useMemo(
+    () => ({
+      hiddenColumns: ['countryCode'],
+    }),
+    []
+  );
+
   const { data, error } = useQuery(GET_ALL_PARTICIPANTS);
 
   useEffect(() => {
@@ -121,6 +147,11 @@ export const SendByEmailSmsTable = () => {
   }, []);
 
   return (
-    <Table columns={columns} data={participants} onCellChange={onCellChange} />
+    <Table
+      columns={columns}
+      data={participants}
+      initialState={initialState}
+      onCellChange={onCellChange}
+    />
   );
-};
+});

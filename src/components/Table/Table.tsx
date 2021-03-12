@@ -5,13 +5,17 @@ import styles from './Table.module.css';
 
 export type IColumn = {
   type?: string;
+  countryCodeAccessor?: string;
   datalist?: Array<string>;
-  validation?: (value: string) => string;
+  validation?: (value: string, originalRow?: any) => string;
 } & Column;
 
 interface IProps {
   columns: IColumn[];
   data: Array<any>;
+  initialState?: {
+    hiddenColumns: string[];
+  };
   onCellChange: (
     id: any,
     fieldName: string,
@@ -24,7 +28,12 @@ const defaultColumn = {
   Cell: EditableCell,
 };
 
-const Table: React.FC<IProps> = ({ columns, data, onCellChange }) => {
+const Table: React.FC<IProps> = ({
+  columns,
+  data,
+  initialState,
+  onCellChange,
+}) => {
   const validations = useMemo(
     () =>
       columns.reduce((prevValues: any, currValue) => {
@@ -46,6 +55,7 @@ const Table: React.FC<IProps> = ({ columns, data, onCellChange }) => {
     columns,
     data,
     defaultColumn,
+    initialState,
     onCellChange,
     validations,
   } as any);

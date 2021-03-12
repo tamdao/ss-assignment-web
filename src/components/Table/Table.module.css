@@ -60,3 +60,17 @@
 .ContryContainer {
   width: 30px;
 }
+.PhoneContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.FlagsSelect > button {
+  padding: 0;
+  border: none;
+  outline: none;
+}
+.FlagsSelect > ul > li {
+  padding: 0 8px;
+}
