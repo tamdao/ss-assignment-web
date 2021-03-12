@@ -22,6 +22,7 @@ import {
   getUpsertParticipantsMutation,
   getDeleteParticipantsMutation,
 } from './sendByEmailSms.gql';
+import { SendByEmailSmsFooter } from './components/SendByEmailSmsFooter';
 
 export default function () {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function () {
       }
 
       setSubmitting(true);
+
       const saveQuery: { mutation: DocumentNode; variables: any }[] = [];
 
       if (newParticipants.length) {
@@ -108,11 +110,10 @@ export default function () {
         </div>
         <AddParticipantButton />
       </Panel>
-      <div className={styles.Footer}>
-        <Button onClick={onSaveParticipants} disabled={submitting}>
-          Save & Continute
-        </Button>
-      </div>
+      <SendByEmailSmsFooter
+        onSaveParticipants={onSaveParticipants}
+        submitting={submitting}
+      />
     </div>
   );
 }
