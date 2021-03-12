@@ -1,12 +1,12 @@
-import React from 'react';
-import { useTable, useExpanded, Column, useRowState } from 'react-table';
+import React, { useMemo } from 'react';
+import { useTable, Column } from 'react-table';
 import { EditableCell } from './EditableCell';
 import styles from './Table.module.css';
 
 export type IColumn = {
   type?: string;
   datalist?: Array<string>;
-  validation?: (value: string) => boolean;
+  validation?: (value: string) => string;
 } & Column;
 
 interface IProps {
@@ -25,21 +25,30 @@ const defaultColumn = {
 };
 
 const Table: React.FC<IProps> = ({ columns, data, onCellChange }) => {
+  const validations = useMemo(
+    () =>
+      columns.reduce((prevValues: any, currValue) => {
+        if (currValue.accessor && currValue.validation) {
+          prevValues[currValue.accessor as string] = currValue.validation;
+        }
+        return prevValues;
+      }, {}),
+    [columns]
+  );
+
   const {
     rows,
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
-  } = useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-      onCellChange,
-    } as any,
-    useRowState
-  );
+  } = useTable({
+    columns,
+    data,
+    defaultColumn,
+    onCellChange,
+    validations,
+  } as any);
 
   return (
     <>

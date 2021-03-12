@@ -6,6 +6,7 @@ interface IProps {
   size?: 'small' | 'normal';
   children: ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 const Button: React.FC<IProps> = ({
@@ -13,10 +14,11 @@ const Button: React.FC<IProps> = ({
   size = 'normal',
   onClick,
   children,
+  disabled,
 }) => {
   const classNames = `${styles.Button} ${styles[type]} ${styles[size]}`;
   return (
-    <button className={classNames} onClick={onClick}>
+    <button className={classNames} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
