@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import Button from '../../components/Button/Button';
 import Panel from '../../components/Panel/Panel';
 
 import styles from './SendByEmailSms.module.css';
@@ -24,7 +23,7 @@ import {
 } from './sendByEmailSms.gql';
 import { SendByEmailSmsFooter } from './components/SendByEmailSmsFooter';
 
-export default function () {
+export default function SendByEmailSms() {
   const dispatch = useDispatch();
   const client = useApolloClient();
 
@@ -92,7 +91,7 @@ export default function () {
 
       setSubmitting(false);
     },
-    [deletedParticipants, newParticipants]
+    [deletedParticipants, newParticipants, client, dispatch, submitting]
   );
 
   useEffect(() => {
@@ -100,7 +99,7 @@ export default function () {
       onSaveParticipants(false);
     }, 300);
     return () => clearInterval(interval);
-  }, [deletedParticipants, newParticipants]);
+  }, [deletedParticipants, newParticipants, onSaveParticipants]);
 
   return (
     <div className={styles.Container}>

@@ -124,7 +124,7 @@ export const SendByEmailSmsTable = memo(() => {
         ),
       },
     ],
-    [participants]
+    [participants, dispatch]
   );
 
   const initialState = useMemo(
@@ -140,11 +140,14 @@ export const SendByEmailSmsTable = memo(() => {
     if (!error && data) {
       dispatch(initParticipants(data.participants));
     }
-  }, [data, error]);
+  }, [data, error, dispatch]);
 
-  const onCellChange = useCallback((id, fieldName, value, rowValid) => {
-    dispatch(updateParticipantFieldValue({ id, fieldName, value, rowValid }));
-  }, []);
+  const onCellChange = useCallback(
+    (id, fieldName, value, rowValid) => {
+      dispatch(updateParticipantFieldValue({ id, fieldName, value, rowValid }));
+    },
+    [dispatch]
+  );
 
   return (
     <Table

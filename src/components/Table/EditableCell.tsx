@@ -87,7 +87,7 @@ export const EditableCell = ({
 
   useEffect(() => {
     setErrorMessage(validation ? validation(initialValue, original) : '');
-  }, [validations]);
+  }, [validations, validation, initialValue, original]);
 
   const classNames = errorMessage
     ? `${styles.Input} ${styles.InputError}`

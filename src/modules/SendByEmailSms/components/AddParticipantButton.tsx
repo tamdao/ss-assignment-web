@@ -8,7 +8,7 @@ export const AddParticipantButton = () => {
 
   const onAddParticipant = useCallback(() => {
     dispatch(addParticipant());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Button type="secondary" size="small" onClick={onAddParticipant}>
