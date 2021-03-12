@@ -57,7 +57,14 @@ export default function () {
     await Promise.all(saveQuery.map((q) => client.mutate(q)));
     dispatch(saveParticipants());
 
-    setSubmitting(true);
+    setSubmitting(false);
+  }, [deletedParticipants, newParticipants]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      onSaveParticipants();
+    }, 300);
+    return () => clearInterval(interval);
   }, [deletedParticipants, newParticipants]);
 
   return (
