@@ -1,6 +1,19 @@
 # SurveySaurus | Take-Home Test
 
+## Mission summary (features + bonus)
 
+- **Add Participants**
+
+  - Email: validation, unique and hover feature
+  - Phone number: validation, validate the phone number based on the selected country and hover feature
+  - First name
+  - Last name
+  - Group: input and dropdown
+
+- **Delete Participants**
+- **Save Participants**
+  - Save manually: display confirm modal
+  - Auto-save
 
 ## Available Scripts
 
