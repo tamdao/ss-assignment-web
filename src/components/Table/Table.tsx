@@ -13,8 +13,8 @@ interface IProps {
   columns: IColumn[];
   data: Array<any>;
   onCellChange: (
-    index: number,
     id: any,
+    fieldName: string,
     value: string,
     rowValid: boolean
   ) => void;

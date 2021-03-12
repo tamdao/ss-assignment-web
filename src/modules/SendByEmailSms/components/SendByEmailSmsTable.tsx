@@ -12,7 +12,7 @@ import {
   initParticipants,
   selectdraftParticipants,
   removeParticipant,
-  updateParticipantFieldByIndex,
+  updateParticipantFieldValue,
   IParticipant,
 } from '../sendByEmailSms.redux';
 import { Row } from 'react-table';
@@ -116,8 +116,8 @@ export const SendByEmailSmsTable = () => {
     }
   }, [data, error]);
 
-  const onCellChange = useCallback((index, id, value, rowValid) => {
-    dispatch(updateParticipantFieldByIndex({ index, id, value, rowValid }));
+  const onCellChange = useCallback((id, fieldName, value, rowValid) => {
+    dispatch(updateParticipantFieldValue({ id, fieldName, value, rowValid }));
   }, []);
 
   return (

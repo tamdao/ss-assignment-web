@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row } from 'react-table';
 import styles from './Table.module.css';
 import { IColumn } from './Table';
+import { IParticipant } from '../../modules/SendByEmailSms/sendByEmailSms.redux';
 
 export const getRowErrorStatus = (
   validations: {
@@ -31,11 +32,11 @@ export const EditableCell = ({
   validations,
 }: {
   value: string;
-  row: Row;
+  row: Row<IParticipant>;
   column: IColumn;
   onCellChange: (
-    index: number,
     id: any,
+    fieldName: string,
     value: string,
     rowValid: boolean
   ) => void;
@@ -55,8 +56,8 @@ export const EditableCell = ({
   const onBlur = () => {
     setErrorMessage(validation ? validation(value || '') : '');
     onCellChange(
-      index,
-      id,
+      original.id,
+      id as string,
       value,
       !getRowErrorStatus(validations, { ...original, [id || '']: value })
     );
@@ -68,12 +69,6 @@ export const EditableCell = ({
 
   useEffect(() => {
     setErrorMessage(validation ? validation(initialValue) : '');
-    onCellChange(
-      index,
-      id,
-      value,
-      !getRowErrorStatus(validations, { ...original, [id || '']: value })
-    );
   }, [validations]);
 
   const classNames = errorMessage

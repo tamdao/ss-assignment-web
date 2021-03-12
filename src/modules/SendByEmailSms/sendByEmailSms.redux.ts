@@ -40,18 +40,19 @@ export const slice: any = createSlice({
       });
     },
     removeParticipant: (state: ISendByEmailSmsState, action) => {
-      const index = state.draftParticipants.findIndex(
-        (dp) => dp.id === action.payload
+      state.draftParticipants = state.draftParticipants.filter(
+        (dp) => dp.id !== action.payload
       );
-      state.draftParticipants.splice(index, 1);
       delete state.validParticipants[action.payload];
     },
-    updateParticipantFieldByIndex: (state: ISendByEmailSmsState, action) => {
-      const participant: any = state.draftParticipants[action.payload.index];
+    updateParticipantFieldValue: (state: ISendByEmailSmsState, action) => {
+      const participant: any = state.draftParticipants.find(
+        (dp) => dp.id === action.payload.id
+      );
       if (participant) {
-        participant[action.payload.id] = action.payload.value;
+        participant[action.payload.fieldName] = action.payload.value;
+        state.validParticipants[participant.id] = action.payload.rowValid;
       }
-      state.validParticipants[participant.id] = action.payload.rowValid;
     },
     saveParticipants: (state: ISendByEmailSmsState) => {
       for (const key in state.validParticipants) {
@@ -131,7 +132,7 @@ export const {
   initParticipants,
   addParticipant,
   removeParticipant,
-  updateParticipantFieldByIndex,
+  updateParticipantFieldValue,
   saveParticipants,
 } = slice.actions;
 
