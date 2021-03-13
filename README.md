@@ -1,5 +1,7 @@
 # SurveySaurus | Take-Home Test
 
+![Screen Shot](./Screen_Shot.png)
+
 ## Mission summary (features + bonus)
 
 - **Add Participants**
