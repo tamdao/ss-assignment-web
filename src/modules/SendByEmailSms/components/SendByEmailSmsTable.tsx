@@ -110,6 +110,7 @@ export const SendByEmailSmsTable = memo(() => {
       {
         Header: 'Group',
         accessor: 'group',
+        type: 'list',
         datalist: ['The Mandalorian', 'Grogu', 'Greef Karga', 'The Client'],
       },
       {

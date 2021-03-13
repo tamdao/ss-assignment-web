@@ -4,6 +4,9 @@ import ReactFlagsSelect from 'react-flags-select';
 
 import styles from './Table.module.css';
 import { IColumn } from './Table';
+import { TextInput } from './Input/TextInput';
+import { PhoneInput } from './Input/PhoneInput';
+import { ListInput } from './Input/ListInput';
 
 export const getRowErrorStatus = (
   validations: {
@@ -93,61 +96,40 @@ export const EditableCell = ({
     ? `${styles.Input} ${styles.InputError}`
     : styles.Input;
 
-  if (datalist) {
+  if (type === 'list') {
     return (
-      <div className={styles.AutoComplete}>
-        <input
-          className={classNames}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          list={id}
-        />
-        <datalist id={id}>
-          {datalist.map((item, key) => (
-            <option key={key} value={item} />
-          ))}
-        </datalist>
-      </div>
+      <ListInput
+        classNames={classNames}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        id={id}
+        datalist={datalist || []}
+      />
     );
   }
 
   if (type === 'phone') {
     return (
-      <div className={styles.PhoneContainer}>
-        <ReactFlagsSelect
-          showOptionLabel={false}
-          showSelectedLabel={false}
-          selected={selectedCountryCode}
-          onSelect={onCountryCodeChange}
-          className={styles.FlagsSelect}
-        />
-        <div className={styles.TooltipContainer}>
-          <input
-            className={classNames}
-            value={value}
-            onChange={onChange}
-            onBlur={onBlur}
-          />
-          {errorMessage && (
-            <span className={styles.TooltipText}>{errorMessage}</span>
-          )}
-        </div>
-      </div>
+      <PhoneInput
+        selectedCountryCode={selectedCountryCode}
+        onCountryCodeChange={onCountryCodeChange}
+        classNames={classNames}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        errorMessage={errorMessage}
+      />
     );
   }
 
   return (
-    <div className={styles.TooltipContainer}>
-      <input
-        className={classNames}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-      {errorMessage && (
-        <span className={styles.TooltipText}>{errorMessage}</span>
-      )}
-    </div>
+    <TextInput
+      classNames={classNames}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      errorMessage={errorMessage}
+    />
   );
 };
